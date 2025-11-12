@@ -6,6 +6,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -75,11 +77,30 @@ public class HttpMethodServlet extends HttpServlet {
         String datasKey = req.getParameter("datasKey");
 
         System.out.println(datas.get(datasKey));
+
+        //응답
+        resp.setContentType("text/html");
+        resp.setCharacterEncoding(StandardCharsets.UTF_8.name());
+        PrintWriter out = resp.getWriter(); //문자 출력용
+        out.println(datas.get(datasKey));
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doPost(req, resp);
+        System.out.println("POST 요청 들어옴");
+
+        System.out.println("요청 메소드: " + req.getMethod());
+        System.out.println("요청 쿼리 파라미터(keyName): " + req.getParameter("keyName"));
+        System.out.println("요청 쿼리 파라미터(value): " + req.getParameter("value"));
+        datas.put(req.getParameter("keyName"), req.getParameter("value"));
+
+        System.out.println(datas.toString());
+
+        //응답
+        resp.setStatus(201);
+        resp.setContentType("text/plain");
+        resp.setCharacterEncoding(StandardCharsets.UTF_8.name());
+        resp.getWriter().println("데이터 추가 성공!!");
     }
 }
 
