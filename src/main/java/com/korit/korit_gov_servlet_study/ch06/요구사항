@@ -1,4 +1,4 @@
-EncodingFilter:
+EncodingFilter: =>어노테이션으로(/ch06/*)
     요청, 응답 문자 인코딩 -> UTF - 8
 
 BoardServlet:
