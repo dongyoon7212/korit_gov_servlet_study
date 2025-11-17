@@ -32,7 +32,3 @@ UserServlet:
 EncodingFilter:
     하던대로
 
-ValidFilter:
-    요청 Url이 /ch07/users 이면서 요청 메소드가 POST이면
-    JSON 요청 데이터에 모든 값이 있는지 확인
-    누락시 chainFilter진행 x
