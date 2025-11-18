@@ -1,6 +1,7 @@
 package com.korit.korit_gov_servlet_study.ch08.user.servlet;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.korit.korit_gov_servlet_study.ch08.user.dto.ApiRespDto;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 @WebServlet("/ch08/user")
@@ -25,7 +27,7 @@ public class UserServlet extends HttpServlet {
     public void init() throws ServletException {
         userService = UserService.getInstance();
         objectMapper = new ObjectMapper();
-//        objectMapper.registerModule()
+        objectMapper.registerModule(new JavaTimeModule());
     }
 
     @Override
@@ -53,11 +55,37 @@ public class UserServlet extends HttpServlet {
                         .build();
             }
         } else if (keyword != null) {
-            //keyword 조회
+            Optional<List<User>> foundUserList = userService.findByKeyword(keyword);
+            if (foundUserList.isPresent()) {
+                apiRespDto = ApiRespDto.<List<User>>builder()
+                        .status("success")
+                        .message(keyword + ": 조회 완료")
+                        .body(foundUserList.get())
+                        .build();
+            } else {
+                apiRespDto = ApiRespDto.<List<User>>builder()
+                        .status("failed")
+                        .message(keyword + ": 조회된 결과가 없습니다.")
+                        .body(null)
+                        .build();
+            }
         } else {
-            //전체조회
+            Optional<List<User>> foundUserList = userService.getUserAll();
+            if (foundUserList.isPresent()) {
+                apiRespDto = ApiRespDto.<List<User>>builder()
+                        .status("success")
+                        .message("전체 조회 성공")
+                        .body(foundUserList.get())
+                        .build();
+            } else {
+                apiRespDto = ApiRespDto.<List<User>>builder()
+                        .status("failed")
+                        .message("조회된 결과가 없습니다.")
+                        .body(null)
+                        .build();
+            }
         }
-
+        objectMapper.writeValue(resp.getWriter(), apiRespDto);
     }
 
     @Override

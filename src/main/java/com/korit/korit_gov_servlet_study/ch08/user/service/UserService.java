@@ -4,6 +4,7 @@ import com.korit.korit_gov_servlet_study.ch08.user.dao.UserDao;
 import com.korit.korit_gov_servlet_study.ch08.user.dto.SignupReqDto;
 import com.korit.korit_gov_servlet_study.ch08.user.entity.User;
 
+import java.util.List;
 import java.util.Optional;
 
 public class UserService {
@@ -23,6 +24,14 @@ public class UserService {
 
     public Optional<User> findByUsername(String username) {
         return userDao.findByUsername(username);
+    }
+
+    public Optional<List<User>> findByKeyword(String keyword) {
+        return userDao.findByKeyword(keyword);
+    }
+
+    public Optional<List<User>> getUserAll() {
+        return userDao.getUserAll();
     }
 
     public boolean isDuplicatedUsername(String username) {

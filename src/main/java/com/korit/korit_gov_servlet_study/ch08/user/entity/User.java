@@ -18,5 +18,6 @@ public class User {
     private String username;
     private String password;
     private int age;
+    @JsonFormat(pattern = "YYYY-MM-dd kk:mm:ss")
     private LocalDateTime createDt;
 }
